@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تحليل المشاعر باستخدام الذكاء الاصطناعي</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>نظام AI Camera لتحليل وقراءة المشاعر البشرية</h1>
+            <p>تطبيق ذكاء اصطناعي يستخدم الكاميرا لتحليل وفهم العواطف البشرية من خلال تعبيرات الوجه</p>
+        </header>
+
+        <main>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="live-tab">البث المباشر</button>
+                <button class="tab-btn" data-tab="upload-tab">تحليل صورة</button>
+                <button class="tab-btn" data-tab="recordings-tab">التسجيلات</button>
+                <button class="tab-btn" data-tab="about-tab">حول النظام</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- قسم البث المباشر -->
+                <div id="live-tab" class="tab-pane active">
+                    <div class="camera-controls">
+                        <button id="start-camera" class="btn primary"><i class="fas fa-play"></i> تشغيل الكاميرا</button>
+                        <button id="stop-camera" class="btn danger" disabled><i class="fas fa-stop"></i> إيقاف الكاميرا</button>
+                        <button id="toggle-recording" class="btn warning" disabled><i class="fas fa-record-vinyl"></i> بدء التسجيل</button>
+                    </div>
+                    
+                    <div class="video-container">
+                        <img id="video-stream" src="{{ url_for('static', filename='img/placeholder.jpg') }}" alt="بث الكاميرا">
+                        <div id="loading-indicator" class="hidden">جاري التحميل...</div>
+                        <div id="camera-status">الكاميرا غير نشطة</div>
+                    </div>
+                    
+                    <div class="emotion-stats">
+                        <h3>إحصائيات المشاعر</h3>
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                <span class="emotion-label">سعادة</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%; background-color: #4CAF50;"></div>
+                                </div>
+                                <span class="percentage">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="emotion-label">حزن</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%; background-color: #2196F3;"></div>
+                                </div>
+                                <span class="percentage">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="emotion-label">غضب</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%; background-color: #F44336;"></div>
+                                </div>
+                                <span class="percentage">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="emotion-label">خوف</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%; background-color: #9C27B0;"></div>
+                                </div>
+                                <span class="percentage">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="emotion-label">اشمئزاز</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%; background-color: #FF9800;"></div>
+                                </div>
+                                <span class="percentage">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="emotion-label">مفاجأة</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%; background-color: #00BCD4;"></div>
+                                </div>
+                                <span class="percentage">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="emotion-label">محايد</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 0%; background-color: #9E9E9E;"></div>
+                                </div>
+                                <span class="percentage">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قسم تحليل الصور -->
+                <div id="upload-tab" class="tab-pane">
+                    <div class="upload-container">
+                        <h3>تحليل صورة</h3>
+                        <p>قم بتحميل صورة لتحليل المشاعر فيها</p>
+                        
+                        <form id="upload-form" enctype="multipart/form-data">
+                            <div class="file-input-container">
+                                <input type="file" id="image-upload" name="image" accept="image/*">
+                                <label for="image-upload" class="file-label">
+                                    <i class="fas fa-upload"></i> اختر صورة
+                                </label>
+                                <span id="file-name">لم يتم اختيار ملف</span>
+                            </div>
+                            
+                            <button type="submit" class="btn primary">
+                                <i class="fas fa-search"></i> تحليل الصورة
+                            </button>
+                        </form>
+                        
+                        <div id="analysis-result" class="hidden">
+                            <h3>نتائج التحليل</h3>
+                            <div class="result-container">
+                                <div class="image-result">
+                                    <img id="analyzed-image" src="" alt="الصورة المحللة">
+                                </div>
+                                <div class="text-result">
+                                    <p>تم اكتشاف <span id="faces-count">0</span> وجوه في الصورة.</p>
+                                    <div id="emotions-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قسم التسجيلات -->
+                <div id="recordings-tab" class="tab-pane">
+                    <div class="recordings-container">
+                        <h3>التسجيلات المحفوظة</h3>
+                        <button id="refresh-recordings" class="btn secondary">
+                            <i class="fas fa-sync-alt"></i> تحديث القائمة
+                        </button>
+                        
+                        <div id="recordings-list" class="recordings-list">
+                            <p id="no-recordings" class="hidden">لا توجد تسجيلات محفوظة.</p>
+                            <!-- سيتم ملء هذا القسم ديناميكياً -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قسم حول النظام -->
+                <div id="about-tab" class="tab-pane">
+                    <div class="about-container">
+                        <h2>حول نظام AI Camera لتحليل وقراءة المشاعر البشرية</h2>
+                        
+                        <div class="about-section">
+                            <h3>الهدف العام</h3>
+                            <p>نظام ذكاء اصطناعي يستخدم الكاميرا لتحليل وفهم العواطف البشرية من خلال تحليل تعبيرات الوجه. يركز النظام على قراءة المشاعر الأساسية (مثل السعادة، الحزن، الغضب)، المشاعر المزدوجة (مثل القلق الممزوج بالغضب)، بالإضافة إلى تقديم دعم خاص للأشخاص الذين يعانون من اضطرابات نفسية مثل التوحد.</p>
+                        </div>
+                        
+                        <div class="about-section">
+                            <h3>الميزات الرئيسية</h3>
+                            <ul>
+                                <li><strong>تحليل المشاعر الأساسية:</strong> تحديد العواطف الأساسية مثل السعادة، الحزن، الغضب، الخوف، الاشمئزاز، الدهشة، واللامبالاة.</li>
+                                <li><strong>تحليل المشاعر المزدوجة:</strong> التعرف على حالات عاطفية معقدة مثل القلق الممزوج بالغضب أو الحزن الممزوج بالتردد.</li>
+                                <li><strong>دعم الأشخاص الذين يعانون من التوحد:</strong> توفير أداة مخصصة لفهم العواطف البشرية للأشخاص الذين يعانون من اضطرابات طيف التوحد.</li>
+                                <li><strong>تكامل مع الكاميرا:</strong> التقاط الصور أو الفيديو مباشرة من الكاميرا وتحليلها في الوقت الفعلي.</li>
+                                <li><strong>تقارير دقيقة:</strong> إنشاء تقارير تحليلية حول العواطف المكتشفة يمكن استخدامها في البحث العلمي أو التطبيقات الطبية.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="about-section">
+                            <h3>المكونات التقنية</h3>
+                            <ul>
+                                <li><strong>OpenCV:</strong> لمعالجة الفيديو والصور من الكاميرا.</li>
+                                <li><strong>TensorFlow / Keras:</strong> لبناء وتدريب نموذج التعلم العميق.</li>
+                                <li><strong>NumPy و Matplotlib:</strong> لمعالجة البيانات وعرض النتائج بصرياً.</li>
+                                <li><strong>Flask:</strong> لإنشاء واجهة مستخدم ويب تفاعلية.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="about-section">
+                            <h3>التطبيقات المحتملة</h3>
+                            <ul>
+                                <li><strong>الصحة النفسية:</strong> مساعدة الأطباء في تشخيص اضطرابات مثل الاكتئاب أو القلق.</li>
+                                <li><strong>التعليم:</strong> تحسين فهم استجابة الطلاب العاطفية.</li>
+                                <li><strong>الروبوتات الاجتماعية:</strong> تحسين التفاعل بين الروبوتات والبشر.</li>
+                                <li><strong>التوحد:</strong> تقديم أداة تعليمية لفهم العواطف البشرية.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>نظام AI Camera لتحليل وقراءة المشاعر البشرية &copy; 2025</p>
+        </footer>
+    </div>
+
+    <!-- نافذة منبثقة للرسائل -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <i id="toast-icon" class="fas fa-info-circle"></i>
+            <div class="toast-message" id="toast-message"></div>
+        </div>
+        <div class="toast-progress"></div>
+    </div>
+
+    <!-- نافذة منبثقة لعرض الفيديو -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="video-title">عرض الفيديو</h3>
+            <video id="video-player" controls></video>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
