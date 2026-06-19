@@ -1,152 +1,152 @@
-# دليل المستخدم لنظام AI Camera لتحليل وقراءة المشاعر البشرية
+# User Guide for AI Camera Emotion Recognition System
 
-## مقدمة
+## Introduction
 
-مرحباً بك في دليل المستخدم لنظام AI Camera لتحليل وقراءة المشاعر البشرية. هذا النظام مصمم لمساعدتك في التعرف على المشاعر البشرية من خلال تحليل تعبيرات الوجه باستخدام تقنيات الذكاء الاصطناعي ورؤية الكمبيوتر.
+Welcome to the User Guide for the AI Camera Emotion Recognition System. This system is designed to help you recognize human emotions by analyzing facial expressions using artificial intelligence and computer vision techniques.
 
-## متطلبات النظام
+## System Requirements
 
-- جهاز كمبيوتر بنظام تشغيل Windows أو macOS أو Linux
-- Python 3.10 أو أحدث (متوافق مع Python 3.13)
-- كاميرا ويب متصلة بالجهاز
-- متصفح ويب حديث (Chrome، Firefox، Edge، Safari)
-- مساحة تخزين: 500 ميجابايت على الأقل
+- Computer with Windows, macOS, or Linux operating system
+- Python 3.10 or higher (compatible with Python 3.13)
+- Webcam connected to the device
+- Modern web browser (Chrome, Firefox, Edge, Safari)
+- Storage space: At least 500 MB
 
-## التثبيت
+## Installation
 
-### الخطوة 1: تثبيت Python
+### Step 1: Install Python
 
-1. قم بتنزيل وتثبيت Python 3.10 أو أحدث من [الموقع الرسمي](https://www.python.org/downloads/).
-2. تأكد من تحديد خيار "Add Python to PATH" أثناء التثبيت.
+1. Download and install Python 3.10 or higher from the [official website](https://www.python.org/downloads/).
+2. Make sure to select the "Add Python to PATH" option during installation.
 
-### الخطوة 2: تثبيت المشروع
+### Step 2: Install the Project
 
-1. قم بفك ضغط ملف `emotion_recognition_project.zip` إلى المجلد الذي تريده.
-2. افتح موجه الأوامر (Command Prompt) أو Terminal.
-3. انتقل إلى مجلد المشروع:
+1. Extract the `emotion_recognition_project.zip` file to the desired folder.
+2. Open Command Prompt or Terminal.
+3. Navigate to the project folder:
    ```
    cd path/to/emotion_recognition_project
    ```
-4. قم بتثبيت المكتبات المطلوبة:
+4. Install the required libraries:
    ```
    pip install -r requirements.txt
    ```
 
-## بدء الاستخدام
+## Getting Started
 
-### تشغيل التطبيق
+### Running the Application
 
-1. افتح موجه الأوامر (Command Prompt) أو Terminal.
-2. انتقل إلى مجلد المشروع:
+1. Open Command Prompt or Terminal.
+2. Navigate to the project folder:
    ```
    cd path/to/emotion_recognition_project
    ```
-3. قم بتشغيل التطبيق:
+3. Run the application:
    ```
    python app.py
    ```
-4. سترى رسالة تشير إلى أن التطبيق يعمل على `http://localhost:5000`.
-5. افتح متصفح الويب وانتقل إلى العنوان: `http://localhost:5000`.
+4. You will see a message indicating that the application is running on `http://localhost:5000`.
+5. Open your web browser and go to: `http://localhost:5000`.
 
-## استخدام واجهة المستخدم
+## Using the User Interface
 
-### الصفحة الرئيسية
+### Home Page
 
-عند فتح التطبيق، ستظهر الصفحة الرئيسية التي تحتوي على الأقسام التالية:
+When you open the application, you will see the home page with the following sections:
 
-1. **البث المباشر**: عرض مباشر من الكاميرا مع تحليل المشاعر في الوقت الفعلي.
-2. **تحليل الصور**: تحميل صور لتحليل المشاعر فيها.
-3. **التسجيلات**: عرض وتحليل التسجيلات السابقة.
-4. **التقارير**: إنشاء وعرض تقارير تحليلية.
-5. **الإعدادات**: تخصيص إعدادات النظام.
+1. **Live Stream**: Live view from the camera with real-time emotion analysis.
+2. **Image Analysis**: Upload images to analyze emotions.
+3. **Recordings**: View and analyze previous recordings.
+4. **Reports**: Create and view analytical reports.
+5. **Settings**: Customize system settings.
 
-### تحليل المشاعر في الوقت الفعلي
+### Real-Time Emotion Analysis
 
-1. انتقل إلى قسم "البث المباشر".
-2. انقر على زر "بدء التحليل".
-3. سيبدأ النظام في عرض البث المباشر من الكاميرا مع تحديد الوجوه وتحليل المشاعر.
-4. يمكنك تفعيل خيار "تحليل المشاعر المزدوجة" لعرض تحليل أكثر تفصيلاً.
-5. يمكنك تفعيل خيار "دعم الأشخاص ذوي التوحد" لعرض أوصاف ونصائح مناسبة.
-6. انقر على زر "إيقاف التحليل" عند الانتهاء.
+1. Go to the "Live Stream" section.
+2. Click the "Start Analysis" button.
+3. The system will start displaying the live stream from your camera with face detection and emotion analysis.
+4. You can enable "Dual Emotion Analysis" to show more detailed analysis.
+5. You can enable "Autism Support" to display appropriate descriptions and tips.
+6. Click the "Stop Analysis" button when finished.
 
-### تحليل الصور
+### Image Analysis
 
-1. انتقل إلى قسم "تحليل الصور".
-2. انقر على زر "اختيار صورة" لتحديد صورة من جهازك.
-3. انقر على زر "تحليل" لبدء تحليل المشاعر في الصورة.
-4. ستظهر نتائج التحليل مع تحديد الوجوه والمشاعر المكتشفة.
-5. يمكنك حفظ نتائج التحليل بالنقر على زر "حفظ النتائج".
+1. Go to the "Image Analysis" section.
+2. Click the "Choose Image" button to select an image from your device.
+3. Click the "Analyze" button to start analyzing emotions in the image.
+4. Analysis results will appear with detected faces and emotions.
+5. You can save the analysis results by clicking the "Save Results" button.
 
-### إنشاء التقارير
+### Creating Reports
 
-1. انتقل إلى قسم "التقارير".
-2. حدد نوع التقرير الذي تريد إنشاءه (PDF، HTML، CSV، JSON).
-3. حدد نطاق البيانات (اليوم، الأسبوع، الشهر، مخصص).
-4. انقر على زر "إنشاء التقرير".
-5. سيتم إنشاء التقرير وعرض رابط لتنزيله.
+1. Go to the "Reports" section.
+2. Select the type of report you want to create (PDF, HTML, CSV, JSON).
+3. Select the data range (Today, Week, Month, Custom).
+4. Click the "Generate Report" button.
+5. The report will be created and a download link will be displayed.
 
-### الإعدادات
+### Settings
 
-1. انتقل إلى قسم "الإعدادات".
-2. يمكنك تخصيص الإعدادات التالية:
-   - دقة الكاميرا
-   - معدل تحديث التحليل
-   - حساسية الكشف عن الوجوه
-   - عتبة الثقة للتعرف على المشاعر
-   - تفعيل/تعطيل تحليل المشاعر المزدوجة
-   - تفعيل/تعطيل دعم الأشخاص ذوي التوحد
-3. انقر على زر "حفظ الإعدادات" لتطبيق التغييرات.
+1. Go to the "Settings" section.
+2. You can customize the following settings:
+   - Camera resolution
+   - Analysis update rate
+   - Face detection sensitivity
+   - Confidence threshold for emotion recognition
+   - Enable/Disable dual emotion analysis
+   - Enable/Disable autism support
+3. Click the "Save Settings" button to apply changes.
 
-## الميزات المتقدمة
+## Advanced Features
 
-### تحليل المشاعر المزدوجة
+### Dual Emotion Analysis
 
-تتيح هذه الميزة للنظام اكتشاف مزيج من المشاعر المختلفة في نفس الوقت، مثل "سعادة مع مفاجأة" أو "خوف مع حزن". لتفعيل هذه الميزة:
+This feature allows the system to detect a mix of different emotions at the same time, such as "Happiness with Surprise" or "Fear with Sadness". To enable this feature:
 
-1. انتقل إلى قسم "الإعدادات".
-2. قم بتفعيل خيار "تحليل المشاعر المزدوجة".
-3. اضبط "عتبة الثقة للمشاعر المزدوجة" حسب الحاجة.
+1. Go to the "Settings" section.
+2. Enable the "Dual Emotion Analysis" option.
+3. Adjust the "Confidence Threshold for Dual Emotions" as needed.
 
-### دعم الأشخاص ذوي التوحد
+### Autism Support
 
-توفر هذه الميزة أوصاف ونصائح مناسبة للأشخاص ذوي التوحد لفهم المشاعر بشكل أفضل. لتفعيل هذه الميزة:
+This feature provides appropriate descriptions and tips for people with autism to better understand emotions. To enable this feature:
 
-1. انتقل إلى قسم "الإعدادات".
-2. قم بتفعيل خيار "دعم الأشخاص ذوي التوحد".
-3. حدد مستوى التفاصيل المطلوب (أساسي، متوسط، مفصل).
+1. Go to the "Settings" section.
+2. Enable the "Autism Support" option.
+3. Select the desired detail level (Basic, Intermediate, Detailed).
 
-## استكشاف الأخطاء وإصلاحها
+## Troubleshooting
 
-### الكاميرا لا تعمل
+### Camera Not Working
 
-1. تأكد من توصيل الكاميرا بشكل صحيح.
-2. تأكد من منح التطبيق إذن الوصول إلى الكاميرا في متصفح الويب.
-3. تأكد من عدم استخدام الكاميرا من قبل تطبيق آخر.
-4. أعد تشغيل التطبيق والمتصفح.
+1. Ensure the camera is properly connected.
+2. Make sure the application has permission to access the camera in your web browser.
+3. Ensure that no other application is using the camera.
+4. Restart the application and browser.
 
-### بطء في التحليل
+### Slow Analysis
 
-1. قلل دقة الكاميرا من قسم "الإعدادات".
-2. قلل معدل تحديث التحليل من قسم "الإعدادات".
-3. تأكد من عدم تشغيل تطبيقات أخرى تستهلك موارد النظام.
+1. Reduce the camera resolution from the "Settings" section.
+2. Reduce the analysis update rate from the "Settings" section.
+3. Ensure that no other resource-intensive applications are running.
 
-### عدم دقة التعرف على المشاعر
+### Inaccurate Emotion Recognition
 
-1. تأكد من وجود إضاءة كافية.
-2. تأكد من وضوح الوجه وعدم وجود عوائق.
-3. اضبط عتبة الثقة للتعرف على المشاعر من قسم "الإعدادات".
+1. Ensure adequate lighting is available.
+2. Ensure the face is clearly visible and unobstructed.
+3. Adjust the confidence threshold for emotion recognition from the "Settings" section.
 
-## الدعم الفني
+## Technical Support
 
-إذا واجهت أي مشاكل أو كان لديك أي استفسارات، يرجى التواصل معنا عبر:
+If you encounter any issues or have questions, please contact us:
 
-- البريد الإلكتروني: support@aicamera.com
-- موقع الدعم: www.aicamera.com/support
+- Email: support@aicamera.com
+- Support website: www.aicamera.com/support
 
-## الخصوصية والأمان
+## Privacy and Security
 
-- جميع عمليات التحليل تتم محلياً على جهازك.
-- لا يتم إرسال أي صور أو بيانات إلى خوادم خارجية.
-- يمكنك حذف جميع البيانات المخزنة من قسم "الإعدادات" > "حذف البيانات".
+- All analysis processes are performed locally on your device.
+- No images or data are sent to external servers.
+- You can delete all stored data from "Settings" > "Delete Data".
 
-نتمنى لك تجربة ممتعة ومفيدة مع نظام AI Camera لتحليل وقراءة المشاعر البشرية!
+We hope you enjoy using the AI Camera Emotion Recognition System!

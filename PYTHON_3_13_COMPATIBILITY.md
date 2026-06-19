@@ -1,184 +1,184 @@
-# توثيق التوافق مع Python 3.13
+# Python 3.13 Compatibility Documentation
 
-هذا المستند يوثق التوافق بين المشروع وإصدار Python 3.13، ويقدم إرشادات للترقية من Python 3.10 إلى Python 3.13.
+This document outlines the compatibility between this project and Python 3.13 version, and provides guidance for upgrading from Python 3.10 to Python 3.13.
 
-## ملخص التوافق
+## Compatibility Summary
 
-تم تطوير مشروع AI Camera لتحليل وقراءة المشاعر البشرية باستخدام Python 3.10، وتم تصميمه ليكون متوافقاً مع Python 3.13. معظم الكود متوافق بشكل مباشر، ولكن قد تكون هناك بعض التغييرات المطلوبة عند الترقية.
+The AI Camera Emotion Recognition project was developed using Python 3.10 and is designed to be compatible with Python 3.13. Most of the code is directly compatible, but some changes may be required when upgrading.
 
-## التغييرات الرئيسية في Python 3.13
+## Major Changes in Python 3.13
 
-فيما يلي بعض التغييرات الرئيسية في Python 3.13 التي قد تؤثر على المشروع:
+Here are some of the major changes in Python 3.13 that may affect this project:
 
-1. **تحسينات في نظام الأنواع (Type System)**: Python 3.13 يقدم تحسينات في نظام الأنواع، مما قد يتطلب تحديث التلميحات النوعية (type hints) في الكود.
+1. **Type System Improvements**: Python 3.13 introduces improvements to the type system, which may require updating type hints in the code.
 
-2. **تغييرات في المكتبات القياسية**: بعض المكتبات القياسية قد تغيرت واجهة برمجة التطبيقات (API) الخاصة بها.
+2. **Standard Library Changes**: Some standard libraries may have changed their API (Application Programming Interface).
 
-3. **إهمال بعض الميزات**: بعض الميزات التي كانت مهملة في الإصدارات السابقة قد تمت إزالتها في Python 3.13.
+3. **Feature Deprecations**: Some features that were deprecated in previous versions may be removed in Python 3.13.
 
-4. **تحسينات في الأداء**: Python 3.13 يقدم تحسينات في الأداء، مما قد يؤثر إيجاباً على سرعة تنفيذ المشروع.
+4. **Performance Improvements**: Python 3.13 offers performance improvements, which may positively impact the execution speed of the project.
 
-## التوافق مع المكتبات المستخدمة
+## Library Compatibility
 
 ### OpenCV
 
-- **الإصدار الموصى به**: 4.8.0 أو أحدث
-- **ملاحظات التوافق**: OpenCV متوافق بشكل عام مع Python 3.13، ولكن يجب التأكد من تثبيت أحدث إصدار.
-- **التغييرات المطلوبة**: لا توجد تغييرات مطلوبة في الكود.
+- **Recommended Version**: 4.8.0 or later
+- **Compatibility Notes**: OpenCV is generally compatible with Python 3.13, but ensure the latest version is installed.
+- **Required Code Changes**: No changes required.
 
 ### TensorFlow/Keras
 
-- **الإصدار الموصى به**: 2.15.0 أو أحدث
-- **ملاحظات التوافق**: قد تكون هناك تغييرات في واجهة برمجة التطبيقات (API) بين الإصدارات.
-- **التغييرات المطلوبة**:
-  - تحديث استدعاءات `tf.keras` إلى `keras` إذا كان الإصدار المستخدم هو Keras المستقل.
-  - التحقق من توافق وظائف النماذج المستخدمة مع الإصدار الجديد.
+- **Recommended Version**: 2.15.0 or later
+- **Compatibility Notes**: There may be API changes between versions.
+- **Required Code Changes**:
+  - Update `tf.keras` calls to `keras` if using standalone Keras.
+  - Verify compatibility of model functions with the new version.
 
 ### NumPy
 
-- **الإصدار الموصى به**: 1.26.0 أو أحدث
-- **ملاحظات التوافق**: NumPy متوافق بشكل عام مع Python 3.13.
-- **التغييرات المطلوبة**: لا توجد تغييرات مطلوبة في الكود.
+- **Recommended Version**: 1.26.0 or later
+- **Compatibility Notes**: NumPy is generally compatible with Python 3.13.
+- **Required Code Changes**: No changes required.
 
 ### Matplotlib
 
-- **الإصدار الموصى به**: 3.8.0 أو أحدث
-- **ملاحظات التوافق**: Matplotlib متوافق بشكل عام مع Python 3.13.
-- **التغييرات المطلوبة**: لا توجد تغييرات مطلوبة في الكود.
+- **Recommended Version**: 3.8.0 or later
+- **Compatibility Notes**: Matplotlib is generally compatible with Python 3.13.
+- **Required Code Changes**: No changes required.
 
 ### Flask
 
-- **الإصدار الموصى به**: 2.3.0 أو أحدث
-- **ملاحظات التوافق**: Flask متوافق بشكل عام مع Python 3.13.
-- **التغييرات المطلوبة**: لا توجد تغييرات مطلوبة في الكود.
+- **Recommended Version**: 2.3.0 or later
+- **Compatibility Notes**: Flask is generally compatible with Python 3.13.
+- **Required Code Changes**: No changes required.
 
-## تحديث ملف requirements.txt
+## Updating requirements.txt
 
-فيما يلي ملف `requirements.txt` محدث للتوافق مع Python 3.13:
+Here is an updated `requirements.txt` for Python 3.13 compatibility:
 
 ```
-# المكتبات الأساسية
+# Core Libraries
 numpy==1.26.0
 matplotlib==3.8.0
 opencv-python==4.8.0.76
 opencv-contrib-python==4.8.0.76
 
-# مكتبات التعلم الآلي
+# Machine Learning Libraries
 tensorflow==2.15.0
 keras==2.15.0
 
-# مكتبات واجهة المستخدم
+# Web User Interface Libraries
 flask==2.3.3
 werkzeug==2.3.7
 jinja2==3.1.2
 
-# مكتبات إنشاء التقارير
+# Report Generation Libraries
 fpdf==1.7.2
 pandas==2.1.1
 seaborn==0.13.0
 
-# مكتبات مساعدة
+# Helper Libraries
 tqdm==4.66.1
 pillow==10.1.0
 ```
 
-## تغييرات محددة في الكود
+## Specific Code Changes
 
-### 1. تحديث استيراد Keras
+### 1. Update Keras Import
 
-في ملف `emotion_recognition.py`:
+In `emotion_recognition.py`:
 
 ```python
-# Python 3.10 (الحالي)
+# Python 3.10 (Current)
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 
-# Python 3.13 (المقترح)
+# Python 3.13 (Recommended)
 from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 ```
 
-### 2. تحديث استخدام المسارات
+### 2. Update Path Usage
 
-في ملفات متعددة:
+In multiple files:
 
 ```python
-# Python 3.10 (الحالي)
+# Python 3.10 (Current)
 import os
 path = os.path.join('models', 'emotion_model.h5')
 
-# Python 3.13 (المقترح)
+# Python 3.13 (Recommended)
 import os
 from pathlib import Path
 path = Path('models') / 'emotion_model.h5'
 ```
 
-### 3. تحديث استخدام الاستثناءات
+### 3. Update Exception Handling
 
-في ملفات متعددة:
+In multiple files:
 
 ```python
-# Python 3.10 (الحالي)
+# Python 3.10 (Current)
 try:
-    # بعض العمليات
+    # Some operations
 except Exception as e:
-    print(f"حدث خطأ: {e}")
+    print(f"An error occurred: {e}")
 
-# Python 3.13 (المقترح)
+# Python 3.13 (Recommended)
 try:
-    # بعض العمليات
+    # Some operations
 except Exception as e:
-    print(f"حدث خطأ: {e}")
-    # يفضل استخدام استثناءات أكثر تحديداً
+    print(f"An error occurred: {e}")
+    # Prefer using more specific exceptions
 ```
 
-## خطوات الترقية
+## Upgrade Steps
 
-1. **تثبيت Python 3.13**:
+1. **Install Python 3.13**:
    ```bash
-   # تثبيت Python 3.13 على Ubuntu
+   # Install Python 3.13 on Ubuntu
    sudo apt-get update
    sudo apt-get install python3.13
    ```
 
-2. **إنشاء بيئة افتراضية جديدة**:
+2. **Create a New Virtual Environment**:
    ```bash
    python3.13 -m venv venv_py313
    source venv_py313/bin/activate
    ```
 
-3. **تثبيت المكتبات المحدثة**:
+3. **Install Updated Libraries**:
    ```bash
    pip install -r requirements_py313.txt
    ```
 
-4. **تحديث الكود**:
-   - قم بتطبيق التغييرات المذكورة أعلاه.
-   - قم باختبار كل وحدة للتأكد من توافقها.
+4. **Update Code**:
+   - Apply the changes mentioned above.
+   - Test each module to ensure compatibility.
 
-5. **اختبار النظام**:
-   - قم بتشغيل اختبارات النظام للتأكد من عمل جميع الوظائف بشكل صحيح.
-   - استخدم وحدة `system_tester.py` لاختبار جميع مكونات النظام.
+5. **Test the System**:
+   - Run system tests to ensure all features work correctly.
+   - Use the `system_tester.py` module to test all system components.
 
-## ملاحظات إضافية
+## Additional Notes
 
-- **التوافق مع الإصدارات السابقة**: إذا كنت بحاجة إلى الحفاظ على التوافق مع Python 3.10، يمكنك استخدام شرطيات لتحديد الكود المناسب لكل إصدار:
+- **Backward Compatibility**: If you need to maintain compatibility with Python 3.10, you can use conditionals to select the appropriate code for each version:
   ```python
   import sys
   if sys.version_info >= (3, 13):
-      # كود متوافق مع Python 3.13
+      # Code compatible with Python 3.13
   else:
-      # كود متوافق مع Python 3.10
+      # Code compatible with Python 3.10
   ```
 
-- **استخدام mypy**: يمكن استخدام أداة `mypy` للتحقق من التلميحات النوعية وضمان توافقها مع Python 3.13:
+- **Using mypy**: You can use the `mypy` tool to check type hints and ensure compatibility with Python 3.13:
   ```bash
   pip install mypy
   mypy --python-version 3.13 your_module.py
   ```
 
-- **تحديثات المكتبات**: تابع تحديثات المكتبات المستخدمة للتأكد من توافقها مع Python 3.13.
+- **Library Updates**: Keep track of library updates to ensure compatibility with Python 3.13.
 
-## الخلاصة
+## Conclusion
 
-مشروع AI Camera لتحليل وقراءة المشاعر البشرية متوافق بشكل عام مع Python 3.13 مع بعض التعديلات البسيطة. باتباع الإرشادات المذكورة أعلاه، يمكنك ترقية المشروع بسهولة من Python 3.10 إلى Python 3.13 والاستفادة من التحسينات في الأداء والميزات الجديدة.
+The AI Camera Emotion Recognition project is generally compatible with Python 3.13 with some minor modifications. By following the guidance provided above, you can easily upgrade the project from Python 3.10 to Python 3.13 and benefit from performance improvements and new features.

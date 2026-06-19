@@ -1,94 +1,90 @@
-"""
-توثيق مشروع AI Camera لتحليل وقراءة المشاعر البشرية
-"""
+# AI Camera Emotion Recognition System
 
-# نظام AI Camera لتحليل وقراءة المشاعر البشرية
+## Overview
 
-## نظرة عامة
+This project is an artificial intelligence system that uses a camera to analyze and detect human emotions. The system relies on computer vision and machine learning techniques to detect faces and analyze their expressions to recognize basic and dual emotions.
 
-هذا المشروع عبارة عن نظام ذكاء اصطناعي يستخدم الكاميرا لتحليل وقراءة المشاعر البشرية. يعتمد النظام على تقنيات رؤية الكمبيوتر والتعلم الآلي للكشف عن الوجوه وتحليل تعبيراتها للتعرف على المشاعر الأساسية والمزدوجة.
+## Key Features
 
-## المميزات الرئيسية
+1. **Face Detection**: Using OpenCV to detect faces in images and video streams.
+2. **Emotion Recognition**: Analyzing facial expressions to recognize basic emotions (happiness, sadness, anger, fear, disgust, surprise, neutral).
+3. **Dual Emotion Analysis**: Ability to detect a mix of different emotions at the same time.
+4. **Autism Support**: Providing appropriate descriptions and tips for people with autism to understand emotions.
+5. **Analytical Reports**: Creating comprehensive reports in different formats (PDF, HTML, CSV, JSON) with charts.
+6. **Web User Interface**: An easy-to-use interface that allows interaction with the system through a web browser.
 
-1. **الكشف عن الوجه**: استخدام OpenCV للكشف عن الوجوه في الصور ومقاطع الفيديو.
-2. **التعرف على المشاعر**: تحليل تعبيرات الوجه للتعرف على المشاعر الأساسية (سعادة، حزن، غضب، خوف، اشمئزاز، مفاجأة، محايد).
-3. **تحليل المشاعر المزدوجة**: القدرة على اكتشاف مزيج من المشاعر المختلفة في نفس الوقت.
-4. **دعم الأشخاص ذوي التوحد**: توفير أوصاف ونصائح مناسبة للأشخاص ذوي التوحد لفهم المشاعر.
-5. **إنشاء تقارير تحليلية**: إنشاء تقارير شاملة بتنسيقات مختلفة (PDF، HTML، CSV، JSON) مع رسوم بيانية.
-6. **واجهة مستخدم ويب**: واجهة سهلة الاستخدام تتيح التفاعل مع النظام عبر المتصفح.
-
-## هيكل المشروع
+## Project Structure
 
 ```
 emotion_recognition_project/
-├── face_detection.py          # وحدة الكشف عن الوجه
-├── emotion_recognition.py     # وحدة التعرف على المشاعر
-├── camera_system.py           # وحدة التكامل مع الكاميرا
-├── advanced_emotion_analyzer.py # وحدة تحليل المشاعر المزدوجة ودعم التوحد
-├── emotion_analytics_reporter.py # وحدة إنشاء التقارير التحليلية
-├── system_tester.py           # وحدة اختبار وتحسين النظام
-├── app.py                     # تطبيق الويب الرئيسي (Flask)
-├── models/                    # مجلد نماذج التعلم الآلي
-├── static/                    # ملفات ثابتة لواجهة المستخدم
-│   ├── css/                   # أنماط CSS
-│   ├── js/                    # ملفات JavaScript
-│   └── img/                   # الصور
-├── templates/                 # قوالب HTML
-│   └── index.html             # الصفحة الرئيسية
-├── utils/                     # أدوات مساعدة
-└── README.md                  # توثيق المشروع
+├── face_detection.py          # Face detection module
+├── emotion_recognition.py     # Emotion recognition module
+├── camera_system.py           # Camera integration module
+├── advanced_emotion_analyzer.py # Dual emotion analysis and autism support module
+├── emotion_analytics_reporter.py # Analytical reports module
+├── system_tester.py           # System testing and improvement module
+├── app.py                     # Main Flask web application
+├── models/                    # Machine learning models folder
+├── static/                    # Static user interface files
+│   ├── css/                   # CSS styles
+│   ├── js/                    # JavaScript files
+│   └── img/                   # Images
+├── templates/                 # HTML templates
+│   └── index.html             # Main page
+├── utils/                     # Helper utilities
+└── README.md                  # Project documentation
 ```
 
-## متطلبات النظام
+## System Requirements
 
-- Python 3.10 أو أحدث (متوافق مع Python 3.13)
+- Python 3.10 or higher (compatible with Python 3.13)
 - OpenCV
 - TensorFlow/Keras
 - NumPy
 - Matplotlib
 - Flask
-- وغيرها من المكتبات المذكورة في ملف requirements.txt
+- And other libraries mentioned in requirements.txt
 
-## التثبيت
+## Installation
 
-1. قم بتثبيت Python 3.10 أو أحدث.
-2. قم بتنزيل أو استنساخ هذا المستودع.
-3. قم بتثبيت المكتبات المطلوبة:
+1. Install Python 3.10 or higher.
+2. Download or clone this repository.
+3. Install the required libraries:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## الاستخدام
+## Usage
 
-### تشغيل تطبيق الويب
+### Running the Web Application
 
 ```bash
 python app.py
 ```
 
-بعد تشغيل التطبيق، يمكنك الوصول إليه عبر المتصفح على العنوان: `http://localhost:5000`
+After running the application, you can access it through your browser at: `http://localhost:5000`
 
-### استخدام وحدات المشروع بشكل منفصل
+### Using Project Modules Separately
 
-يمكن استخدام وحدات المشروع بشكل منفصل في مشاريع أخرى. على سبيل المثال:
+Project modules can be used separately in other projects. For example:
 
 ```python
 from face_detection import FaceDetector
 from emotion_recognition import EmotionRecognizer
 from advanced_emotion_analyzer import AdvancedEmotionAnalyzer
 
-# تهيئة كاشف الوجوه
+# Initialize face detector
 face_detector = FaceDetector()
 
-# تهيئة نموذج التعرف على المشاعر
+# Initialize emotion recognition model
 emotion_recognizer = EmotionRecognizer()
 
-# تهيئة محلل المشاعر المتقدم
+# Initialize advanced emotion analyzer
 advanced_analyzer = AdvancedEmotionAnalyzer(emotion_recognizer)
 advanced_analyzer.enable_autism_support(True)
 
-# استخدام النظام
+# Use the system
 image = cv2.imread('test_image.jpg')
 faces = face_detector.detect_faces(image)
 face_regions = face_detector.extract_face_regions(image, faces)
@@ -98,27 +94,27 @@ for face_region in face_regions:
     print(analysis_result)
 ```
 
-## التوافق مع Python 3.13
+## Python 3.13 Compatibility
 
-تم تطوير هذا المشروع باستخدام Python 3.10، ولكنه متوافق مع Python 3.13. للاستخدام مع Python 3.13، يرجى مراعاة النقاط التالية:
+This project was developed using Python 3.10, but is compatible with Python 3.13. To use with Python 3.13, please consider the following points:
 
-1. تأكد من تثبيت أحدث إصدارات المكتبات المذكورة في ملف requirements.txt.
-2. قد تحتاج إلى تعديل بعض استدعاءات TensorFlow/Keras إذا كانت هناك تغييرات في واجهة البرمجة بين الإصدارات.
-3. تم اختبار الكود للتأكد من عدم استخدام ميزات مهملة في Python 3.13.
+1. Ensure that the latest versions of the libraries mentioned in requirements.txt are installed.
+2. You may need to modify some TensorFlow/Keras calls if there are changes in the API between versions.
+3. The code has been tested to ensure that deprecated features in Python 3.13 are not used.
 
-## المساهمة
+## Contributing
 
-نرحب بالمساهمات لتحسين هذا المشروع! يرجى اتباع الخطوات التالية:
+We welcome contributions to improve this project! Please follow these steps:
 
-1. قم بعمل fork للمستودع.
-2. قم بإنشاء فرع جديد للميزة أو الإصلاح.
-3. قم بإجراء التغييرات وإضافة اختبارات إذا أمكن.
-4. قم بإرسال طلب سحب.
+1. Fork the repository.
+2. Create a new branch for your feature or fix.
+3. Make your changes and add tests if possible.
+4. Submit a pull request.
 
-## الترخيص
+## License
 
-هذا المشروع مرخص بموجب رخصة MIT. راجع ملف LICENSE للحصول على التفاصيل.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-## الاتصال
+## Contact
 
-إذا كان لديك أي أسئلة أو اقتراحات، يرجى فتح مشكلة في هذا المستودع أو التواصل مع فريق التطوير.
+If you have any questions or suggestions, please open an issue in this repository or contact the development team.

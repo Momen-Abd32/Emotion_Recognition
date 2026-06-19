@@ -1,77 +1,77 @@
 /**
- * main.js - الوظائف الرئيسية لتطبيق تحليل المشاعر
+ * main.js - Main functions for emotion analysis application
  */
 
-// متغيرات عامة
+// Global variables
 let cameraActive = false;
 let recordingActive = false;
 let videoStream = null;
 let emotionStats = {};
 
-// عند تحميل الصفحة
+// When page loads
 document.addEventListener('DOMContentLoaded', function() {
-    // تهيئة علامات التبويب
+    // Initialize tabs
     initTabs();
     
-    // تهيئة أزرار التحكم بالكاميرا
+    // Initialize camera control buttons
     initCameraControls();
     
-    // تهيئة نموذج تحميل الصور
+    // Initialize image upload form
     initUploadForm();
     
-    // تحميل قائمة التسجيلات
+    // Load recordings list
     loadRecordings();
     
-    // تهيئة النوافذ المنبثقة
+    // Initialize modals
     initModals();
 });
 
-// تهيئة علامات التبويب
+// Initialize tabs
 function initTabs() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
     
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // إزالة الفئة النشطة من جميع الأزرار
+            // Remove active class from all buttons
             tabButtons.forEach(btn => btn.classList.remove('active'));
             
-            // إضافة الفئة النشطة للزر المضغوط
+            // Add active class to clicked button
             button.classList.add('active');
             
-            // إخفاء جميع أقسام المحتوى
+            // Hide all content sections
             tabPanes.forEach(pane => pane.classList.remove('active'));
             
-            // إظهار قسم المحتوى المطلوب
+            // Show requested content section
             const tabId = button.getAttribute('data-tab');
             document.getElementById(tabId).classList.add('active');
         });
     });
 }
 
-// تهيئة أزرار التحكم بالكاميرا
+// Initialize camera control buttons
 function initCameraControls() {
     const startCameraBtn = document.getElementById('start-camera');
     const stopCameraBtn = document.getElementById('stop-camera');
     const toggleRecordingBtn = document.getElementById('toggle-recording');
     
-    // زر تشغيل الكاميرا
+    // Start camera button
     startCameraBtn.addEventListener('click', () => {
         startCamera();
     });
     
-    // زر إيقاف الكاميرا
+    // Stop camera button
     stopCameraBtn.addEventListener('click', () => {
         stopCamera();
     });
     
-    // زر بدء/إيقاف التسجيل
+    // Start/stop recording button
     toggleRecordingBtn.addEventListener('click', () => {
         toggleRecording();
     });
 }
 
-// تشغيل الكاميرا
+// Start camera
 function startCamera() {
     const videoStream = document.getElementById('video-stream');
     const loadingIndicator = document.getElementById('loading-indicator');
@@ -80,49 +80,49 @@ function startCamera() {
     const stopCameraBtn = document.getElementById('stop-camera');
     const toggleRecordingBtn = document.getElementById('toggle-recording');
     
-    // إظهار مؤشر التحميل
+    // Show loading indicator
     loadingIndicator.classList.remove('hidden');
-    cameraStatus.textContent = 'جاري تشغيل الكاميرا...';
+    cameraStatus.textContent = 'Starting camera...';
     
-    // طلب تشغيل الكاميرا من الخادم
+    // Request to start camera from server
     fetch('/start_camera', {
         method: 'POST'
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success' || data.status === 'info') {
-            // تحديث حالة الكاميرا
+            // Update camera state
             cameraActive = true;
             
-            // تحديث مصدر الفيديو
+            // Update video source
             videoStream.src = '/video_feed?' + new Date().getTime();
             
-            // تحديث حالة الأزرار
+            // Update button states
             startCameraBtn.disabled = true;
             stopCameraBtn.disabled = false;
             toggleRecordingBtn.disabled = false;
             
-            // تحديث حالة الكاميرا
-            cameraStatus.textContent = 'الكاميرا نشطة';
+            // Update camera status
+            cameraStatus.textContent = 'Camera is active';
             
-            // عرض رسالة نجاح
+            // Show success message
             showToast(data.message, 'success');
         } else {
-            // عرض رسالة خطأ
+            // Show error message
             showToast(data.message, 'error');
         }
     })
     .catch(error => {
         console.error('Error starting camera:', error);
-        showToast('حدث خطأ أثناء تشغيل الكاميرا', 'error');
+        showToast('An error occurred while starting the camera', 'error');
     })
     .finally(() => {
-        // إخفاء مؤشر التحميل
+        // Hide loading indicator
         loadingIndicator.classList.add('hidden');
     });
 }
 
-// إيقاف الكاميرا
+// Stop camera
 function stopCamera() {
     const videoStream = document.getElementById('video-stream');
     const cameraStatus = document.getElementById('camera-status');
@@ -130,121 +130,121 @@ function stopCamera() {
     const stopCameraBtn = document.getElementById('stop-camera');
     const toggleRecordingBtn = document.getElementById('toggle-recording');
     
-    // طلب إيقاف الكاميرا من الخادم
+    // Request to stop camera from server
     fetch('/stop_camera', {
         method: 'POST'
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success' || data.status === 'info') {
-            // تحديث حالة الكاميرا
+            // Update camera state
             cameraActive = false;
             
-            // إعادة تعيين مصدر الفيديو
+            // Reset video source
             videoStream.src = '/static/img/placeholder.jpg';
             
-            // تحديث حالة الأزرار
+            // Update button states
             startCameraBtn.disabled = false;
             stopCameraBtn.disabled = true;
             toggleRecordingBtn.disabled = true;
             
-            // إعادة تعيين نص زر التسجيل
-            toggleRecordingBtn.innerHTML = '<i class="fas fa-record-vinyl"></i> بدء التسجيل';
+            // Reset recording button text
+            toggleRecordingBtn.innerHTML = '<i class="fas fa-record-vinyl"></i> Start Recording';
             toggleRecordingBtn.classList.remove('danger');
             toggleRecordingBtn.classList.add('warning');
             
-            // تحديث حالة التسجيل
+            // Update recording state
             recordingActive = false;
             
-            // تحديث حالة الكاميرا
-            cameraStatus.textContent = 'الكاميرا غير نشطة';
+            // Update camera status
+            cameraStatus.textContent = 'Camera is inactive';
             
-            // عرض رسالة نجاح
+            // Show success message
             showToast(data.message, 'success');
         } else {
-            // عرض رسالة خطأ
+            // Show error message
             showToast(data.message, 'error');
         }
     })
     .catch(error => {
         console.error('Error stopping camera:', error);
-        showToast('حدث خطأ أثناء إيقاف الكاميرا', 'error');
+        showToast('An error occurred while stopping the camera', 'error');
     });
 }
 
-// تبديل حالة التسجيل
+// Toggle recording state
 function toggleRecording() {
     const toggleRecordingBtn = document.getElementById('toggle-recording');
     
-    // طلب تبديل حالة التسجيل من الخادم
+    // Request to toggle recording state from server
     fetch('/toggle_recording', {
         method: 'POST'
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // تحديث حالة التسجيل
+            // Update recording state
             recordingActive = data.recording;
             
-            // تحديث نص الزر
+            // Update button text
             if (recordingActive) {
-                toggleRecordingBtn.innerHTML = '<i class="fas fa-stop-circle"></i> إيقاف التسجيل';
+                toggleRecordingBtn.innerHTML = '<i class="fas fa-stop-circle"></i> Stop Recording';
                 toggleRecordingBtn.classList.remove('warning');
                 toggleRecordingBtn.classList.add('danger');
             } else {
-                toggleRecordingBtn.innerHTML = '<i class="fas fa-record-vinyl"></i> بدء التسجيل';
+                toggleRecordingBtn.innerHTML = '<i class="fas fa-record-vinyl"></i> Start Recording';
                 toggleRecordingBtn.classList.remove('danger');
                 toggleRecordingBtn.classList.add('warning');
                 
-                // تحديث قائمة التسجيلات
+                // Update recordings list
                 loadRecordings();
             }
             
-            // عرض رسالة نجاح
+            // Show success message
             showToast(data.message, 'success');
         } else {
-            // عرض رسالة خطأ
+            // Show error message
             showToast(data.message, 'error');
         }
     })
     .catch(error => {
         console.error('Error toggling recording:', error);
-        showToast('حدث خطأ أثناء تبديل حالة التسجيل', 'error');
+        showToast('An error occurred while toggling recording', 'error');
     });
 }
 
-// تهيئة نموذج تحميل الصور
+// Initialize image upload form
 function initUploadForm() {
     const uploadForm = document.getElementById('upload-form');
     const imageUpload = document.getElementById('image-upload');
     const fileName = document.getElementById('file-name');
     
-    // تحديث اسم الملف عند اختياره
+    // Update file name when selected
     imageUpload.addEventListener('change', () => {
         if (imageUpload.files.length > 0) {
             fileName.textContent = imageUpload.files[0].name;
         } else {
-            fileName.textContent = 'لم يتم اختيار ملف';
+            fileName.textContent = 'No file selected';
         }
     });
     
-    // معالجة تقديم النموذج
+    // Handle form submission
     uploadForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
         if (imageUpload.files.length === 0) {
-            showToast('الرجاء اختيار صورة أولاً', 'warning');
+            showToast('Please select an image first', 'warning');
             return;
         }
         
-        // إنشاء كائن FormData
+        // Create FormData object
         const formData = new FormData();
         formData.append('image', imageUpload.files[0]);
         
-        // إظهار رسالة تحميل
-        showToast('جاري تحليل الصورة...', 'info');
+        // Show loading message
+        showToast('Analyzing image...', 'info');
         
-        // إرسال الصورة للتحليل
+        // Send image for analysis
         fetch('/analyze_image', {
             method: 'POST',
             body: formData
@@ -252,34 +252,34 @@ function initUploadForm() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                // عرض نتائج التحليل
+                // Display analysis results
                 displayAnalysisResults(data);
             } else {
-                // عرض رسالة خطأ
+                // Show error message
                 showToast(data.message, 'error');
             }
         })
         .catch(error => {
             console.error('Error analyzing image:', error);
-            showToast('حدث خطأ أثناء تحليل الصورة', 'error');
+            showToast('An error occurred while analyzing the image', 'error');
         });
     });
 }
 
-// عرض نتائج تحليل الصورة
+// Display image analysis results
 function displayAnalysisResults(data) {
     const analysisResult = document.getElementById('analysis-result');
     const analyzedImage = document.getElementById('analyzed-image');
     const facesCount = document.getElementById('faces-count');
     const emotionsList = document.getElementById('emotions-list');
     
-    // تعيين الصورة المحللة
+    // Set analyzed image
     analyzedImage.src = data.image;
     
-    // تعيين عدد الوجوه
+    // Set faces count
     facesCount.textContent = data.faces_count;
     
-    // إنشاء قائمة المشاعر
+    // Create emotions list
     emotionsList.innerHTML = '';
     
     if (data.faces_count > 0) {
@@ -287,52 +287,52 @@ function displayAnalysisResults(data) {
             const emotionItem = document.createElement('div');
             emotionItem.className = 'emotion-item';
             emotionItem.innerHTML = `
-                <strong>الوجه ${index + 1}:</strong>
-                <p>المشاعر: ${item.emotion}</p>
-                <p>نسبة الثقة: ${(item.confidence * 100).toFixed(2)}%</p>
+                <strong>Face ${index + 1}:</strong>
+                <p>Emotion: ${item.emotion}</p>
+                <p>Confidence: ${(item.confidence * 100).toFixed(2)}%</p>
             `;
             emotionsList.appendChild(emotionItem);
         });
     } else {
-        emotionsList.innerHTML = '<p>لم يتم اكتشاف أي وجوه في الصورة.</p>';
+        emotionsList.innerHTML = '<p>No faces detected in the image.</p>';
     }
     
-    // إظهار نتائج التحليل
+    // Show analysis results
     analysisResult.classList.remove('hidden');
     
-    // عرض رسالة نجاح
-    showToast('تم تحليل الصورة بنجاح', 'success');
+    // Show success message
+    showToast('Image analyzed successfully', 'success');
 }
 
-// تحميل قائمة التسجيلات
+// Load recordings list
 function loadRecordings() {
     const recordingsList = document.getElementById('recordings-list');
     const noRecordings = document.getElementById('no-recordings');
     const refreshRecordingsBtn = document.getElementById('refresh-recordings');
     
-    // تعطيل زر التحديث أثناء التحميل
+    // Disable refresh button while loading
     refreshRecordingsBtn.disabled = true;
     
-    // إظهار رسالة تحميل
-    recordingsList.innerHTML = '<p>جاري تحميل التسجيلات...</p>';
+    // Show loading message
+    recordingsList.innerHTML = '<p>Loading recordings...</p>';
     
-    // طلب قائمة التسجيلات من الخادم
+    // Request recordings list from server
     fetch('/get_recordings')
     .then(response => response.json())
     .then(data => {
-        // إعادة تعيين قائمة التسجيلات
+        // Reset recordings list
         recordingsList.innerHTML = '';
         
         if (data.recordings.length > 0) {
-            // إخفاء رسالة عدم وجود تسجيلات
+            // Hide no recordings message
             noRecordings.classList.add('hidden');
             
-            // إنشاء عناصر التسجيلات
+            // Create recording items
             data.recordings.forEach(recording => {
                 const recordingItem = document.createElement('div');
                 recordingItem.className = 'recording-item';
                 
-                // تحويل حجم الملف إلى صيغة مقروءة
+                // Convert file size to readable format
                 const fileSize = formatFileSize(recording.size);
                 
                 recordingItem.innerHTML = `
@@ -345,10 +345,10 @@ function loadRecordings() {
                     </div>
                     <div class="recording-actions">
                         <button class="btn secondary play-recording" data-path="${recording.path}" data-name="${recording.name}">
-                            <i class="fas fa-play"></i> تشغيل
+                            <i class="fas fa-play"></i> Play
                         </button>
                         <a href="${recording.path}" download="${recording.name}" class="btn primary">
-                            <i class="fas fa-download"></i> تنزيل
+                            <i class="fas fa-download"></i> Download
                         </a>
                     </div>
                 `;
@@ -356,7 +356,7 @@ function loadRecordings() {
                 recordingsList.appendChild(recordingItem);
             });
             
-            // إضافة مستمعي الأحداث لأزرار التشغيل
+            // Add event listeners for play buttons
             document.querySelectorAll('.play-recording').forEach(button => {
                 button.addEventListener('click', () => {
                     const path = button.getAttribute('data-path');
@@ -365,24 +365,24 @@ function loadRecordings() {
                 });
             });
         } else {
-            // إظهار رسالة عدم وجود تسجيلات
+            // Show no recordings message
             noRecordings.classList.remove('hidden');
         }
     })
     .catch(error => {
         console.error('Error loading recordings:', error);
-        recordingsList.innerHTML = '<p>حدث خطأ أثناء تحميل التسجيلات</p>';
+        recordingsList.innerHTML = '<p>An error occurred while loading recordings</p>';
     })
     .finally(() => {
-        // إعادة تفعيل زر التحديث
+        // Re-enable refresh button
         refreshRecordingsBtn.disabled = false;
     });
     
-    // إضافة مستمع الحدث لزر التحديث
+    // Add event listener for refresh button
     refreshRecordingsBtn.addEventListener('click', loadRecordings);
 }
 
-// تنسيق حجم الملف
+// Format file size
 function formatFileSize(bytes) {
     if (bytes === 0) return '0 Bytes';
     
@@ -393,17 +393,17 @@ function formatFileSize(bytes) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// تهيئة النوافذ المنبثقة
+// Initialize modals
 function initModals() {
     const videoModal = document.getElementById('video-modal');
     const closeBtn = videoModal.querySelector('.close');
     
-    // إغلاق النافذة المنبثقة عند النقر على زر الإغلاق
+    // Close modal when close button is clicked
     closeBtn.addEventListener('click', () => {
         closeVideoModal();
     });
     
-    // إغلاق النافذة المنبثقة عند النقر خارجها
+    // Close modal when clicking outside
     window.addEventListener('click', (e) => {
         if (e.target === videoModal) {
             closeVideoModal();
@@ -411,48 +411,48 @@ function initModals() {
     });
 }
 
-// فتح نافذة عرض الفيديو
+// Open video display modal
 function openVideoModal(videoPath, videoName) {
     const videoModal = document.getElementById('video-modal');
     const videoTitle = document.getElementById('video-title');
     const videoPlayer = document.getElementById('video-player');
     
-    // تعيين عنوان الفيديو
+    // Set video title
     videoTitle.textContent = videoName;
     
-    // تعيين مصدر الفيديو
+    // Set video source
     videoPlayer.src = videoPath;
     
-    // إظهار النافذة المنبثقة
+    // Show modal
     videoModal.style.display = 'block';
     
-    // تشغيل الفيديو
+    // Play video
     videoPlayer.play();
 }
 
-// إغلاق نافذة عرض الفيديو
+// Close video display modal
 function closeVideoModal() {
     const videoModal = document.getElementById('video-modal');
     const videoPlayer = document.getElementById('video-player');
     
-    // إيقاف الفيديو
+    // Pause video
     videoPlayer.pause();
     
-    // إخفاء النافذة المنبثقة
+    // Hide modal
     videoModal.style.display = 'none';
 }
 
-// عرض رسالة منبثقة
+// Show toast notification
 function showToast(message, type = 'info') {
     const toast = document.getElementById('toast');
     const toastIcon = document.getElementById('toast-icon');
     const toastMessage = document.getElementById('toast-message');
     const toastProgress = document.querySelector('.toast-progress');
     
-    // تعيين الرسالة
+    // Set message
     toastMessage.textContent = message;
     
-    // تعيين الأيقونة حسب نوع الرسالة
+    // Set icon based on message type
     toastIcon.className = '';
     switch (type) {
         case 'success':
@@ -472,15 +472,15 @@ function showToast(message, type = 'info') {
             toastProgress.style.backgroundColor = '#2196F3';
     }
     
-    // إظهار الرسالة
+    // Show message
     toast.classList.remove('hidden');
     
-    // إعادة تشغيل الرسم المتحرك
+    // Restart animation
     toastProgress.style.animation = 'none';
-    void toast.offsetWidth; // إعادة تدفق
+    void toast.offsetWidth; // Trigger reflow
     toastProgress.style.animation = 'progress 5s linear forwards';
     
-    // إخفاء الرسالة بعد 5 ثوانٍ
+    // Hide message after 5 seconds
     setTimeout(() => {
         toast.classList.add('hidden');
     }, 5000);

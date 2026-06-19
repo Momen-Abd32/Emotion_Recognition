@@ -1,5 +1,5 @@
 """
-اختبار وتحسين نظام تحليل المشاعر
+System Testing and Improvement Module
 """
 
 import os
@@ -10,39 +10,39 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-# استيراد الوحدات المخصصة
+# Import custom modules
 from face_detection import FaceDetector
 from emotion_recognition import EmotionRecognizer
 from advanced_emotion_analyzer import AdvancedEmotionAnalyzer
 from emotion_analytics_reporter import EmotionAnalyticsReporter
 
 class SystemTester:
-    """فئة لاختبار وتحسين نظام تحليل المشاعر"""
+    """Class for testing and improving the emotion analysis system"""
     
-    def __init__(self, test_dir="/home/ubuntu/emotion_recognition_project/test_data"):
+    def __init__(self, test_dir="test_data"):
         """
-        تهيئة مختبر النظام
+        Initialize the system tester
         
-        المعلمات:
-            test_dir (str): مجلد بيانات الاختبار
+        Parameters:
+            test_dir (str): Test data directory
         """
         self.test_dir = test_dir
         self.results_dir = os.path.join(test_dir, "results")
         
-        # إنشاء مجلدات الاختبار إذا لم تكن موجودة
+        # Create test directories if they do not exist
         if not os.path.exists(test_dir):
             os.makedirs(test_dir)
         
         if not os.path.exists(self.results_dir):
             os.makedirs(self.results_dir)
         
-        # تهيئة مكونات النظام
+        # Initialize system components
         self.face_detector = None
         self.emotion_recognizer = None
         self.advanced_analyzer = None
         self.reporter = None
         
-        # مؤشرات الأداء
+        # Performance metrics
         self.performance_metrics = {
             'face_detection_time': [],
             'emotion_recognition_time': [],
@@ -51,89 +51,89 @@ class SystemTester:
         }
     
     def initialize_components(self):
-        """تهيئة مكونات النظام"""
-        print("تهيئة مكونات النظام...")
+        """Initialize system components"""
+        print("Initializing system components...")
         
-        # تهيئة كاشف الوجوه
+        # Initialize face detector
         self.face_detector = FaceDetector()
         
-        # تهيئة نموذج التعرف على المشاعر
-        model_path = "/home/ubuntu/emotion_recognition_project/models/emotion_model.h5"
+        # Initialize emotion recognition model
+        model_path = os.path.join(os.path.dirname(__file__), "models", "emotion_model.h5")
         if not os.path.exists(model_path):
-            print(f"تحذير: ملف النموذج غير موجود في {model_path}")
-            print("سيتم إنشاء نموذج جديد.")
+            print(f"Warning: Model file not found at {model_path}")
+            print("A new model will be created.")
         
         self.emotion_recognizer = EmotionRecognizer(model_path)
         
-        # تهيئة محلل المشاعر المتقدم
+        # Initialize advanced emotion analyzer
         self.advanced_analyzer = AdvancedEmotionAnalyzer(self.emotion_recognizer)
         self.advanced_analyzer.enable_autism_support(True)
         
-        # تهيئة منشئ التقارير
+        # Initialize analytics reporter
         self.reporter = EmotionAnalyticsReporter(os.path.join(self.results_dir, "reports"))
         
-        print("تم تهيئة جميع مكونات النظام بنجاح.")
+        print("All system components initialized successfully.")
     
     def test_face_detection(self, image_path=None):
         """
-        اختبار وحدة الكشف عن الوجه
+        Test face detection module
         
-        المعلمات:
-            image_path (str): مسار صورة الاختبار (اختياري)
+        Parameters:
+            image_path (str): Path to test image (optional)
             
-        العائد:
-            dict: نتائج الاختبار
+        Returns:
+            dict: Test results
         """
         if self.face_detector is None:
             self.initialize_components()
         
-        print("اختبار وحدة الكشف عن الوجه...")
+        print("Testing face detection module...")
         
-        # استخدام صورة اختبار محددة أو الكاميرا
+        # Use specified test image or camera
         if image_path and os.path.exists(image_path):
             image = cv2.imread(image_path)
             if image is None:
-                print(f"فشل في قراءة الصورة من {image_path}")
+                print(f"Failed to read image from {image_path}")
                 return None
         else:
-            # التقاط صورة من الكاميرا
+            # Capture image from camera
             cap = cv2.VideoCapture(0)
             if not cap.isOpened():
-                print("فشل في فتح الكاميرا!")
+                print("Failed to open camera!")
                 return None
             
             ret, image = cap.read()
             cap.release()
             
             if not ret:
-                print("فشل في التقاط صورة من الكاميرا!")
+                print("Failed to capture image from camera!")
                 return None
             
-            # حفظ الصورة الملتقطة
+            # Save captured image
             if not os.path.exists(self.test_dir):
                 os.makedirs(self.test_dir)
             
             image_path = os.path.join(self.test_dir, "test_image.jpg")
             cv2.imwrite(image_path, image)
         
-        # قياس وقت الكشف عن الوجوه
+        # Measure face detection time
         start_time = time.time()
         faces = self.face_detector.detect_faces(image)
         detection_time = time.time() - start_time
         
-        # استخراج مناطق الوجوه
+        # Extract face regions
         face_regions = self.face_detector.extract_face_regions(image, faces)
         
-        # إنشاء صورة مع تحديد الوجوه
+        # Create image with detected faces
         result_image = image.copy()
         for (x, y, w, h) in faces:
             cv2.rectangle(result_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
         
-        # حفظ الصورة النتيجة
+        # Save result image
         result_path = os.path.join(self.results_dir, "face_detection_result.jpg")
         cv2.imwrite(result_path, result_image)
         
-        # تجميع نتائج الاختبار
+        # Compile test results
         results = {
             'image_path': image_path,
             'result_path': result_path,
@@ -142,34 +142,34 @@ class SystemTester:
             'detection_time': detection_time
         }
         
-        # إضافة وقت الكشف إلى مؤشرات الأداء
+        # Add detection time to performance metrics
         self.performance_metrics['face_detection_time'].append(detection_time)
         
-        print(f"تم اكتشاف {len(faces)} وجوه في {detection_time:.4f} ثانية.")
-        print(f"تم حفظ نتيجة الاختبار في {result_path}")
+        print(f"Detected {len(faces)} faces in {detection_time:.4f} seconds.")
+        print(f"Test result saved to {result_path}")
         
         return results
     
     def test_emotion_recognition(self, face_regions=None, image_path=None):
         """
-        اختبار وحدة التعرف على المشاعر
+        Test emotion recognition module
         
-        المعلمات:
-            face_regions (list): مناطق الوجوه (اختياري)
-            image_path (str): مسار صورة الاختبار (اختياري)
+        Parameters:
+            face_regions (list): Face regions (optional)
+            image_path (str): Path to test image (optional)
             
-        العائد:
-            dict: نتائج الاختبار
+        Returns:
+            dict: Test results
         """
         if self.emotion_recognizer is None:
             self.initialize_components()
         
-        print("اختبار وحدة التعرف على المشاعر...")
+        print("Testing emotion recognition module...")
         
-        # الحصول على مناطق الوجوه إذا لم يتم توفيرها
+        # Get face regions if not provided
         if face_regions is None:
             if image_path is None:
-                # اختبار الكشف عن الوجه للحصول على مناطق الوجوه
+                # Test face detection to get face regions
                 face_detection_results = self.test_face_detection()
                 if face_detection_results is None:
                     return None
@@ -177,28 +177,28 @@ class SystemTester:
                 face_regions = face_detection_results['face_regions']
                 image_path = face_detection_results['image_path']
             else:
-                # قراءة الصورة وكشف الوجوه
+                # Read image and detect faces
                 image = cv2.imread(image_path)
                 if image is None:
-                    print(f"فشل في قراءة الصورة من {image_path}")
+                    print(f"Failed to read image from {image_path}")
                     return None
                 
                 faces = self.face_detector.detect_faces(image)
                 face_regions = self.face_detector.extract_face_regions(image, faces)
         
         if not face_regions:
-            print("لم يتم توفير مناطق وجوه للاختبار!")
+            print("No face regions provided for testing!")
             return None
         
-        # قراءة الصورة الأصلية
+        # Read original image
         original_image = cv2.imread(image_path) if image_path else None
         
-        # تحليل المشاعر لكل وجه
+        # Analyze emotions for each face
         emotions = []
         recognition_times = []
         
         for i, face_region in enumerate(face_regions):
-            # قياس وقت التعرف على المشاعر
+            # Measure emotion recognition time
             start_time = time.time()
             emotion, confidence = self.emotion_recognizer.predict_emotion(face_region)
             recognition_time = time.time() - start_time
@@ -211,69 +211,69 @@ class SystemTester:
             
             recognition_times.append(recognition_time)
         
-        # حساب متوسط وقت التعرف
+        # Calculate average recognition time
         avg_recognition_time = np.mean(recognition_times) if recognition_times else 0
         
-        # إنشاء صورة نتيجة إذا كانت الصورة الأصلية متاحة
+        # Create result image if original image is available
         if original_image is not None:
             result_image = original_image.copy()
             
-            # رسم نتائج التعرف على المشاعر
+            # Draw emotion recognition results
             if self.face_detector:
                 faces = self.face_detector.detect_faces(original_image)
                 
                 for i, (x, y, w, h) in enumerate(faces):
                     if i < len(emotions):
-                        # رسم مستطيل حول الوجه
+                        # Draw rectangle around face
                         cv2.rectangle(result_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
                         
-                        # عرض المشاعر المتوقعة
+                        # Display predicted emotion
                         emotion_text = f"{emotions[i]['emotion']} ({emotions[i]['confidence']:.2f})"
                         cv2.putText(result_image, emotion_text, (x, y - 10),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
             
-            # حفظ الصورة النتيجة
+            # Save result image
             result_path = os.path.join(self.results_dir, "emotion_recognition_result.jpg")
             cv2.imwrite(result_path, result_image)
         else:
             result_path = None
         
-        # تجميع نتائج الاختبار
+        # Compile test results
         results = {
             'emotions': emotions,
             'avg_recognition_time': avg_recognition_time,
             'result_path': result_path
         }
         
-        # إضافة وقت التعرف إلى مؤشرات الأداء
+        # Add recognition time to performance metrics
         self.performance_metrics['emotion_recognition_time'].append(avg_recognition_time)
         
-        print(f"تم تحليل المشاعر لـ {len(emotions)} وجوه في {avg_recognition_time:.4f} ثانية في المتوسط.")
+        print(f"Analyzed emotions for {len(emotions)} faces in {avg_recognition_time:.4f} seconds on average.")
         if result_path:
-            print(f"تم حفظ نتيجة الاختبار في {result_path}")
+            print(f"Test result saved to {result_path}")
         
         return results
     
     def test_advanced_analysis(self, face_regions=None, image_path=None):
         """
-        اختبار وحدة التحليل المتقدم للمشاعر
+        Test advanced emotion analysis module
         
-        المعلمات:
-            face_regions (list): مناطق الوجوه (اختياري)
-            image_path (str): مسار صورة الاختبار (اختياري)
+        Parameters:
+            face_regions (list): Face regions (optional)
+            image_path (str): Path to test image (optional)
             
-        العائد:
-            dict: نتائج الاختبار
+        Returns:
+            dict: Test results
         """
         if self.advanced_analyzer is None:
             self.initialize_components()
         
-        print("اختبار وحدة التحليل المتقدم للمشاعر...")
+        print("Testing advanced emotion analysis module...")
         
-        # الحصول على مناطق الوجوه إذا لم يتم توفيرها
+        # Get face regions if not provided
         if face_regions is None:
             if image_path is None:
-                # اختبار الكشف عن الوجه للحصول على مناطق الوجوه
+                # Test face detection to get face regions
                 face_detection_results = self.test_face_detection()
                 if face_detection_results is None:
                     return None
@@ -281,28 +281,28 @@ class SystemTester:
                 face_regions = face_detection_results['face_regions']
                 image_path = face_detection_results['image_path']
             else:
-                # قراءة الصورة وكشف الوجوه
+                # Read image and detect faces
                 image = cv2.imread(image_path)
                 if image is None:
-                    print(f"فشل في قراءة الصورة من {image_path}")
+                    print(f"Failed to read image from {image_path}")
                     return None
                 
                 faces = self.face_detector.detect_faces(image)
                 face_regions = self.face_detector.extract_face_regions(image, faces)
         
         if not face_regions:
-            print("لم يتم توفير مناطق وجوه للاختبار!")
+            print("No face regions provided for testing!")
             return None
         
-        # قراءة الصورة الأصلية
+        # Read original image
         original_image = cv2.imread(image_path) if image_path else None
         
-        # تحليل المشاعر المتقدم لكل وجه
+        # Perform advanced emotion analysis for each face
         advanced_results = []
         analysis_times = []
         
         for i, face_region in enumerate(face_regions):
-            # قياس وقت التحليل المتقدم
+            # Measure advanced analysis time
             start_time = time.time()
             analysis_result = self.advanced_analyzer.analyze_emotion_with_support(face_region)
             analysis_time = time.time() - start_time
@@ -312,23 +312,23 @@ class SystemTester:
             
             analysis_times.append(analysis_time)
         
-        # حساب متوسط وقت التحليل
+        # Calculate average analysis time
         avg_analysis_time = np.mean(analysis_times) if analysis_times else 0
         
-        # إنشاء صورة نتيجة إذا كانت الصورة الأصلية متاحة
+        # Create result image if original image is available
         if original_image is not None:
             result_image = original_image.copy()
             
-            # رسم نتائج التحليل المتقدم
+            # Draw advanced analysis results
             if self.face_detector:
                 faces = self.face_detector.detect_faces(original_image)
                 
                 for i, (x, y, w, h) in enumerate(faces):
                     if i < len(advanced_results):
-                        # رسم مستطيل حول الوجه
+                        # Draw rectangle around face
                         cv2.rectangle(result_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
                         
-                        # عرض المشاعر المزدوجة
+                        # Display dual emotion
                         dual_emotion = advanced_results[i].get('dual_emotion')
                         dual_confidence = advanced_results[i].get('dual_confidence', 0)
                         
@@ -337,134 +337,85 @@ class SystemTester:
                             cv2.putText(result_image, emotion_text, (x, y - 10),
                                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
             
-            # حفظ الصورة النتيجة
+            # Save result image
             result_path = os.path.join(self.results_dir, "advanced_analysis_result.jpg")
             cv2.imwrite(result_path, result_image)
         else:
             result_path = None
         
-        # تجميع نتائج الاختبار
+        # Compile test results
         results = {
             'advanced_results': advanced_results,
             'avg_analysis_time': avg_analysis_time,
             'result_path': result_path
         }
         
-        # إضافة وقت التحليل إلى مؤشرات الأداء
+        # Add analysis time to performance metrics
         self.performance_metrics['advanced_analysis_time'].append(avg_analysis_time)
         
-        print(f"تم إجراء التحليل المتقدم لـ {len(advanced_results)} وجوه في {avg_analysis_time:.4f} ثانية في المتوسط.")
+        print(f"Performed advanced analysis for {len(advanced_results)} faces in {avg_analysis_time:.4f} seconds on average.")
         if result_path:
-            print(f"تم حفظ نتيجة الاختبار في {result_path}")
-        
-        return results
-    
-    def test_analytics_reporter(self, advanced_results=None):
-        """
-        اختبار وحدة إنشاء التقارير التحليلية
-        
-        المعلمات:
-            advanced_results (list): نتائج التحليل المتقدم (اختياري)
-            
-        العائد:
-            dict: نتائج الاختبار
-        """
-        if self.reporter is None:
-            self.initialize_components()
-        
-        print("اختبار وحدة إنشاء التقارير التحليلية...")
-        
-        # الحصول على نتائج التحليل المتقدم إذا لم يتم توفيرها
-        if advanced_results is None:
-            # اختبار التحليل المتقدم للحصول على النتائج
-            advanced_analysis_results = self.test_advanced_analysis()
-            if advanced_analysis_results is None:
-                return None
-            
-            advanced_results = advanced_analysis_results['advanced_results']
-        
-        if not advanced_results:
-            print("لم يتم توفير نتائج تحليل للاختبار!")
-            return None
-        
-        # إضافة نتائج التحليل إلى منشئ التقارير
-        for result in advanced_results:
-            self.reporter.add_emotion_data(result)
-        
-        # إنشاء التقارير
-        start_time = time.time()
-        reports = self.reporter.generate_all_reports()
-        report_generation_time = time.time() - start_time
-        
-        # تجميع نتائج الاختبار
-        results = {
-            'reports': reports,
-            'report_generation_time': report_generation_time
-        }
-        
-        print(f"تم إنشاء التقارير في {report_generation_time:.4f} ثانية.")
-        for report_type, path in reports.items():
-            print(f"تقرير {report_type}: {path}")
+            print(f"Test result saved to {result_path}")
         
         return results
     
     def test_end_to_end_processing(self, image_path=None):
         """
-        اختبار المعالجة من البداية إلى النهاية
+        Test end-to-end processing
         
-        المعلمات:
-            image_path (str): مسار صورة الاختبار (اختياري)
+        Parameters:
+            image_path (str): Path to test image (optional)
             
-        العائد:
-            dict: نتائج الاختبار
+        Returns:
+            dict: Test results
         """
         if self.face_detector is None or self.emotion_recognizer is None or self.advanced_analyzer is None or self.reporter is None:
             self.initialize_components()
         
-        print("اختبار المعالجة من البداية إلى النهاية...")
+        print("Testing end-to-end processing...")
         
-        # استخدام صورة اختبار محددة أو الكاميرا
+        # Use specified test image or camera
         if image_path and os.path.exists(image_path):
             image = cv2.imread(image_path)
             if image is None:
-                print(f"فشل في قراءة الصورة من {image_path}")
+                print(f"Failed to read image from {image_path}")
                 return None
         else:
-            # التقاط صورة من الكاميرا
+            # Capture image from camera
             cap = cv2.VideoCapture(0)
             if not cap.isOpened():
-                print("فشل في فتح الكاميرا!")
+                print("Failed to open camera!")
                 return None
             
             ret, image = cap.read()
             cap.release()
             
             if not ret:
-                print("فشل في التقاط صورة من الكاميرا!")
+                print("Failed to capture image from camera!")
                 return None
             
-            # حفظ الصورة الملتقطة
+            # Save captured image
             if not os.path.exists(self.test_dir):
                 os.makedirs(self.test_dir)
             
             image_path = os.path.join(self.test_dir, "end_to_end_test_image.jpg")
             cv2.imwrite(image_path, image)
         
-        # قياس وقت المعالجة الكلي
+        # Measure total processing time
         total_start_time = time.time()
         
-        # 1. الكشف عن الوجوه
+        # 1. Detect faces
         face_detection_start = time.time()
         faces = self.face_detector.detect_faces(image)
         face_regions = self.face_detector.extract_face_regions(image, faces)
         face_detection_time = time.time() - face_detection_start
         
-        # 2. تحليل المشاعر لكل وجه
+        # 2. Analyze emotions for each face
         emotion_results = []
         advanced_results = []
         
         for face_region in face_regions:
-            # التعرف على المشاعر
+            # Emotion recognition
             emotion_recognition_start = time.time()
             emotion, confidence = self.emotion_recognizer.predict_emotion(face_region)
             emotion_recognition_time = time.time() - emotion_recognition_start
@@ -475,7 +426,7 @@ class SystemTester:
                 'recognition_time': emotion_recognition_time
             })
             
-            # التحليل المتقدم
+            # Advanced analysis
             advanced_analysis_start = time.time()
             analysis_result = self.advanced_analyzer.analyze_emotion_with_support(face_region)
             advanced_analysis_time = time.time() - advanced_analysis_start
@@ -483,26 +434,26 @@ class SystemTester:
             analysis_result['analysis_time'] = advanced_analysis_time
             advanced_results.append(analysis_result)
             
-            # إضافة البيانات إلى منشئ التقارير
+            # Add data to analytics reporter
             self.reporter.add_emotion_data(analysis_result)
         
-        # 3. إنشاء التقارير
+        # 3. Generate reports
         reports_start = time.time()
         reports = self.reporter.generate_all_reports()
         reports_time = time.time() - reports_start
         
-        # حساب الوقت الكلي
+        # Calculate total time
         total_time = time.time() - total_start_time
         
-        # إنشاء صورة نتيجة
+        # Create result image
         result_image = image.copy()
         
         for i, (x, y, w, h) in enumerate(faces):
             if i < len(advanced_results):
-                # رسم مستطيل حول الوجه
+                # Draw rectangle around face
                 cv2.rectangle(result_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 
-                # عرض المشاعر المزدوجة
+                # Display dual emotion
                 dual_emotion = advanced_results[i].get('dual_emotion')
                 dual_confidence = advanced_results[i].get('dual_confidence', 0)
                 
@@ -511,11 +462,11 @@ class SystemTester:
                     cv2.putText(result_image, emotion_text, (x, y - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
         
-        # حفظ الصورة النتيجة
+        # Save result image
         result_path = os.path.join(self.results_dir, "end_to_end_result.jpg")
         cv2.imwrite(result_path, result_image)
         
-        # تجميع نتائج الاختبار
+        # Compile test results
         results = {
             'image_path': image_path,
             'result_path': result_path,
@@ -530,61 +481,61 @@ class SystemTester:
             'total_time': total_time
         }
         
-        # إضافة أوقات المعالجة إلى مؤشرات الأداء
+        # Add processing times to performance metrics
         self.performance_metrics['face_detection_time'].append(face_detection_time)
         self.performance_metrics['emotion_recognition_time'].append(results['emotion_recognition_time'])
         self.performance_metrics['advanced_analysis_time'].append(results['advanced_analysis_time'])
         self.performance_metrics['total_processing_time'].append(total_time)
         
-        print(f"تم اكتشاف {len(faces)} وجوه في {face_detection_time:.4f} ثانية.")
-        print(f"متوسط وقت التعرف على المشاعر: {results['emotion_recognition_time']:.4f} ثانية.")
-        print(f"متوسط وقت التحليل المتقدم: {results['advanced_analysis_time']:.4f} ثانية.")
-        print(f"وقت إنشاء التقارير: {reports_time:.4f} ثانية.")
-        print(f"إجمالي وقت المعالجة: {total_time:.4f} ثانية.")
-        print(f"تم حفظ نتيجة الاختبار في {result_path}")
+        print(f"Detected {len(faces)} faces in {face_detection_time:.4f} seconds.")
+        print(f"Average emotion recognition time: {results['emotion_recognition_time']:.4f} seconds.")
+        print(f"Average advanced analysis time: {results['advanced_analysis_time']:.4f} seconds.")
+        print(f"Report generation time: {reports_time:.4f} seconds.")
+        print(f"Total processing time: {total_time:.4f} seconds.")
+        print(f"Test result saved to {result_path}")
         
         return results
     
     def test_performance_with_multiple_images(self, num_iterations=5):
         """
-        اختبار أداء النظام مع صور متعددة
+        Test system performance with multiple images
         
-        المعلمات:
-            num_iterations (int): عدد التكرارات
+        Parameters:
+            num_iterations (int): Number of iterations
             
-        العائد:
-            dict: نتائج الاختبار
+        Returns:
+            dict: Test results
         """
         if self.face_detector is None or self.emotion_recognizer is None or self.advanced_analyzer is None:
             self.initialize_components()
         
-        print(f"اختبار أداء النظام مع {num_iterations} تكرارات...")
+        print(f"Testing system performance with {num_iterations} iterations...")
         
-        # تهيئة مصفوفات لتخزين أوقات المعالجة
+        # Initialize arrays to store processing times
         face_detection_times = []
         emotion_recognition_times = []
         advanced_analysis_times = []
         total_times = []
         
-        # فتح الكاميرا
+        # Open camera
         cap = cv2.VideoCapture(0)
         if not cap.isOpened():
-            print("فشل في فتح الكاميرا!")
+            print("Failed to open camera!")
             return None
         
         try:
-            for i in tqdm(range(num_iterations), desc="تقدم الاختبار"):
-                # التقاط صورة من الكاميرا
+            for i in tqdm(range(num_iterations), desc="Test progress"):
+                # Capture image from camera
                 ret, image = cap.read()
                 
                 if not ret:
-                    print("فشل في التقاط صورة من الكاميرا!")
+                    print("Failed to capture image from camera!")
                     continue
                 
-                # قياس وقت المعالجة الكلي
+                # Measure total processing time
                 total_start_time = time.time()
                 
-                # 1. الكشف عن الوجوه
+                # 1. Detect faces
                 face_detection_start = time.time()
                 faces = self.face_detector.detect_faces(image)
                 face_regions = self.face_detector.extract_face_regions(image, faces)
@@ -592,50 +543,50 @@ class SystemTester:
                 
                 face_detection_times.append(face_detection_time)
                 
-                # 2. تحليل المشاعر لكل وجه
+                # 2. Analyze emotions for each face
                 emotion_recognition_times_iter = []
                 advanced_analysis_times_iter = []
                 
                 for face_region in face_regions:
-                    # التعرف على المشاعر
+                    # Emotion recognition
                     emotion_recognition_start = time.time()
                     emotion, confidence = self.emotion_recognizer.predict_emotion(face_region)
                     emotion_recognition_time = time.time() - emotion_recognition_start
                     
                     emotion_recognition_times_iter.append(emotion_recognition_time)
                     
-                    # التحليل المتقدم
+                    # Advanced analysis
                     advanced_analysis_start = time.time()
                     analysis_result = self.advanced_analyzer.analyze_emotion_with_support(face_region)
                     advanced_analysis_time = time.time() - advanced_analysis_start
                     
                     advanced_analysis_times_iter.append(advanced_analysis_time)
                 
-                # حساب متوسط أوقات المعالجة لهذا التكرار
+                # Calculate average processing times for this iteration
                 avg_emotion_recognition_time = np.mean(emotion_recognition_times_iter) if emotion_recognition_times_iter else 0
                 avg_advanced_analysis_time = np.mean(advanced_analysis_times_iter) if advanced_analysis_times_iter else 0
                 
                 emotion_recognition_times.append(avg_emotion_recognition_time)
                 advanced_analysis_times.append(avg_advanced_analysis_time)
                 
-                # حساب الوقت الكلي
+                # Calculate total time
                 total_time = time.time() - total_start_time
                 total_times.append(total_time)
                 
-                # إضافة أوقات المعالجة إلى مؤشرات الأداء
+                # Add processing times to performance metrics
                 self.performance_metrics['face_detection_time'].append(face_detection_time)
                 self.performance_metrics['emotion_recognition_time'].append(avg_emotion_recognition_time)
                 self.performance_metrics['advanced_analysis_time'].append(avg_advanced_analysis_time)
                 self.performance_metrics['total_processing_time'].append(total_time)
                 
-                # تأخير قصير بين التكرارات
+                # Short delay between iterations
                 time.sleep(0.1)
         
         finally:
-            # تحرير الكاميرا
+            # Release camera
             cap.release()
         
-        # حساب متوسط وانحراف أوقات المعالجة
+        # Calculate average and standard deviation of processing times
         avg_face_detection_time = np.mean(face_detection_times)
         std_face_detection_time = np.std(face_detection_times)
         
@@ -648,7 +599,7 @@ class SystemTester:
         avg_total_time = np.mean(total_times)
         std_total_time = np.std(total_times)
         
-        # تجميع نتائج الاختبار
+        # Compile test results
         results = {
             'num_iterations': num_iterations,
             'face_detection': {
@@ -673,31 +624,31 @@ class SystemTester:
             }
         }
         
-        print("\nنتائج اختبار الأداء:")
-        print(f"متوسط وقت الكشف عن الوجوه: {avg_face_detection_time:.4f} ± {std_face_detection_time:.4f} ثانية")
-        print(f"متوسط وقت التعرف على المشاعر: {avg_emotion_recognition_time:.4f} ± {std_emotion_recognition_time:.4f} ثانية")
-        print(f"متوسط وقت التحليل المتقدم: {avg_advanced_analysis_time:.4f} ± {std_advanced_analysis_time:.4f} ثانية")
-        print(f"متوسط وقت المعالجة الكلي: {avg_total_time:.4f} ± {std_total_time:.4f} ثانية")
+        print("\nPerformance Test Results:")
+        print(f"Average face detection time: {avg_face_detection_time:.4f} ± {std_face_detection_time:.4f} seconds")
+        print(f"Average emotion recognition time: {avg_emotion_recognition_time:.4f} ± {std_emotion_recognition_time:.4f} seconds")
+        print(f"Average advanced analysis time: {avg_advanced_analysis_time:.4f} ± {std_advanced_analysis_time:.4f} seconds")
+        print(f"Average total processing time: {avg_total_time:.4f} ± {std_total_time:.4f} seconds")
         
-        # رسم مخطط لأوقات المعالجة
+        # Plot performance metrics
         self.plot_performance_metrics(results)
         
         return results
     
     def plot_performance_metrics(self, results=None):
         """
-        رسم مخططات لمؤشرات الأداء
+        Plot performance metrics
         
-        المعلمات:
-            results (dict): نتائج اختبار الأداء (اختياري)
+        Parameters:
+            results (dict): Performance test results (optional)
         """
         if results is None:
-            # استخدام مؤشرات الأداء المخزنة
+            # Use stored performance metrics
             if not any(self.performance_metrics.values()):
-                print("لا توجد بيانات أداء كافية للرسم!")
+                print("Not enough performance data for plotting!")
                 return
             
-            # تحويل مؤشرات الأداء إلى تنسيق مناسب للرسم
+            # Convert performance metrics to suitable format for plotting
             results = {
                 'face_detection': {
                     'times': self.performance_metrics['face_detection_time'],
@@ -721,10 +672,10 @@ class SystemTester:
                 }
             }
         
-        # إنشاء مخطط شريطي لمتوسط أوقات المعالجة
+        # Create bar chart for average processing times
         plt.figure(figsize=(12, 6))
         
-        labels = ['الكشف عن الوجوه', 'التعرف على المشاعر', 'التحليل المتقدم', 'المعالجة الكلية']
+        labels = ['Face Detection', 'Emotion Recognition', 'Advanced Analysis', 'Total Processing']
         avg_times = [
             results['face_detection']['avg_time'],
             results['emotion_recognition']['avg_time'],
@@ -744,107 +695,101 @@ class SystemTester:
         plt.bar(x, avg_times, width, yerr=std_times, capsize=10, 
                 color=['#4CAF50', '#2196F3', '#9C27B0', '#F44336'])
         
-        plt.xlabel('مرحلة المعالجة', fontsize=14)
-        plt.ylabel('الوقت (ثانية)', fontsize=14)
-        plt.title('متوسط أوقات المعالجة لكل مرحلة', fontsize=16)
+        plt.xlabel('Processing Stage', fontsize=14)
+        plt.ylabel('Time (seconds)', fontsize=14)
+        plt.title('Average Processing Times for Each Stage', fontsize=16)
         plt.xticks(x, labels)
         plt.grid(axis='y', alpha=0.3)
         
-        # إضافة القيم فوق الأشرطة
+        # Add values above bars
         for i, v in enumerate(avg_times):
             plt.text(i, v + std_times[i] + 0.01, f"{v:.4f}s", ha='center', fontsize=12)
         
         plt.tight_layout()
         
-        # حفظ المخطط
+        # Save chart
         chart_path = os.path.join(self.results_dir, "performance_metrics.png")
         plt.savefig(chart_path, dpi=300)
         
-        print(f"تم حفظ مخطط مؤشرات الأداء في {chart_path}")
+        print(f"Performance metrics chart saved to {chart_path}")
         
-        # إنشاء مخطط خطي لتطور أوقات المعالجة
+        # Create line chart for processing time evolution
         if len(results['face_detection']['times']) > 1:
             plt.figure(figsize=(12, 6))
             
-            plt.plot(results['face_detection']['times'], label='الكشف عن الوجوه', marker='o')
-            plt.plot(results['emotion_recognition']['times'], label='التعرف على المشاعر', marker='s')
-            plt.plot(results['advanced_analysis']['times'], label='التحليل المتقدم', marker='^')
-            plt.plot(results['total_processing']['times'], label='المعالجة الكلية', marker='*')
+            plt.plot(results['face_detection']['times'], label='Face Detection', marker='o')
+            plt.plot(results['emotion_recognition']['times'], label='Emotion Recognition', marker='s')
+            plt.plot(results['advanced_analysis']['times'], label='Advanced Analysis', marker='^')
+            plt.plot(results['total_processing']['times'], label='Total Processing', marker='*')
             
-            plt.xlabel('رقم التكرار', fontsize=14)
-            plt.ylabel('الوقت (ثانية)', fontsize=14)
-            plt.title('تطور أوقات المعالجة عبر التكرارات', fontsize=16)
+            plt.xlabel('Iteration Number', fontsize=14)
+            plt.ylabel('Time (seconds)', fontsize=14)
+            plt.title('Processing Time Evolution Across Iterations', fontsize=16)
             plt.grid(True, alpha=0.3)
             plt.legend(loc='best')
             
             plt.tight_layout()
             
-            # حفظ المخطط
+            # Save chart
             chart_path = os.path.join(self.results_dir, "performance_evolution.png")
             plt.savefig(chart_path, dpi=300)
             
-            print(f"تم حفظ مخطط تطور الأداء في {chart_path}")
+            print(f"Performance evolution chart saved to {chart_path}")
     
     def run_all_tests(self):
         """
-        تشغيل جميع الاختبارات
+        Run all tests
         
-        العائد:
-            dict: نتائج جميع الاختبارات
+        Returns:
+            dict: Results of all tests
         """
-        print("بدء تشغيل جميع الاختبارات...")
+        print("Starting all tests...")
         
-        # تهيئة مكونات النظام
+        # Initialize system components
         self.initialize_components()
         
-        # اختبار الكشف عن الوجه
+        # Test face detection
         face_detection_results = self.test_face_detection()
         
-        # اختبار التعرف على المشاعر
+        # Test emotion recognition
         emotion_recognition_results = self.test_emotion_recognition(
             face_regions=face_detection_results['face_regions'] if face_detection_results else None,
             image_path=face_detection_results['image_path'] if face_detection_results else None
         )
         
-        # اختبار التحليل المتقدم
+        # Test advanced analysis
         advanced_analysis_results = self.test_advanced_analysis(
             face_regions=face_detection_results['face_regions'] if face_detection_results else None,
             image_path=face_detection_results['image_path'] if face_detection_results else None
         )
         
-        # اختبار إنشاء التقارير
-        analytics_reporter_results = self.test_analytics_reporter(
-            advanced_results=advanced_analysis_results['advanced_results'] if advanced_analysis_results else None
-        )
-        
-        # اختبار المعالجة من البداية إلى النهاية
+        # Test end-to-end processing
         end_to_end_results = self.test_end_to_end_processing()
         
-        # اختبار الأداء مع صور متعددة
+        # Test performance with multiple images
         performance_results = self.test_performance_with_multiple_images(num_iterations=5)
         
-        # رسم مخططات لمؤشرات الأداء
+        # Plot performance metrics
         self.plot_performance_metrics()
         
-        # تجميع نتائج جميع الاختبارات
+        # Compile results of all tests
         all_results = {
             'face_detection': face_detection_results,
             'emotion_recognition': emotion_recognition_results,
             'advanced_analysis': advanced_analysis_results,
-            'analytics_reporter': analytics_reporter_results,
             'end_to_end': end_to_end_results,
             'performance': performance_results
         }
         
-        print("تم الانتهاء من جميع الاختبارات بنجاح.")
+        print("All tests completed successfully.")
         
         return all_results
 
 
-# تشغيل الاختبارات إذا تم تشغيل هذا الملف مباشرة
+# Run tests if this file is run directly
 if __name__ == "__main__":
-    # إنشاء مختبر النظام
+    # Create system tester
     tester = SystemTester()
     
-    # تشغيل جميع الاختبارات
+    # Run all tests
     results = tester.run_all_tests()
